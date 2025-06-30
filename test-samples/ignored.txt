@@ -1,0 +1,2 @@
+This file should be ignored.
+api_key = "should_not_detect_this"
