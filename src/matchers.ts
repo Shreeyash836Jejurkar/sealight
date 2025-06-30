@@ -13,6 +13,6 @@ export const secretPatterns: { name: string, regex: RegExp }[] = [
     },
     {
       name: "Base64 String",
-      regex: /(?:[A-Za-z0-9+/]{4}){4,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?/g
+      regex: /\b(?:[A-Za-z0-9+/]{16,}={1,2})\b/g
     }
   ];
