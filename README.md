@@ -60,6 +60,25 @@ Sealight uses built-in regex patterns to catch:
 
 ---
 
+## 🧩 Scalable Secret Matchers
+
+Sealight loads its secret detection patterns from an external `key-patterns.json` file in the project root. This makes it easy to add or update patterns for new key types without changing the code.
+
+**To add a new matcher:**
+1. Open `key-patterns.json` in your project root.
+2. Add a new object with a `name` and a `regex` string. Example:
+   ```json
+   {
+     "name": "My Service API Key",
+     "regex": "myservice_[A-Za-z0-9]{32}"
+   }
+   ```
+3. Save the file and rerun Sealight.
+
+> All regexes are loaded dynamically at runtime. No code changes required!
+
+---
+
 ## 📂 .sealightignore – Exclude Files or Folders
 
 Create a `.sealightignore` file in your project root to exclude files or folders from being scanned.
@@ -70,9 +89,10 @@ Create a `.sealightignore` file in your project root to exclude files or folders
 **/mocks/**
 .env.local
 src/secrets/sample.json
+**/ignored.txt   # Use glob patterns relative to the scan root
 ```
 
-> Uses glob patterns. Similar behavior to `.gitignore`.
+> Uses glob patterns. Patterns are relative to the scan root (the directory you pass to Sealight). For example, if you scan `test-samples`, use `ignored.txt` or `**/ignored.txt` to ignore a file in that folder.
 
 ---
 
