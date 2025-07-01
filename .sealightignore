@@ -1,5 +1,1 @@
-# Ignore mock secrets
-**/mocks/**
-.env.local
-**/dev/secret.json
-test-samples/ignored.txt
+**/ignored.txt

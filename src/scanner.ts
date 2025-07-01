@@ -15,14 +15,11 @@ const DEFAULT_IGNORE = [
 ];
 
 export async function scanDirectory(basePath: string) {
-  console.log(`🔍 Scanning: ${path.resolve(basePath)}\n`);
- 
-  const userIgnore = await readUserIgnoreList(basePath);
-  const combinedIgnore = [...DEFAULT_IGNORE, ...userIgnore];
+  const absBase = path.resolve(basePath);
+  console.log(`🔍 Scanning: ${absBase}\n`);
 
-  if (userIgnore.length > 0) {
-    console.log(`⚠️  Loaded ${userIgnore.length} ignore rule(s) from .sealightignore\n`);
-  }
+  const userIgnore = await readUserIgnoreList(process.cwd());
+  const combinedIgnore = [...DEFAULT_IGNORE, ...userIgnore];
 
   const files = await globby([`${basePath}/**/*.*`], {
     gitignore: true,
@@ -34,9 +31,11 @@ export async function scanDirectory(basePath: string) {
 
   let totalFindings = 0;
 
-  for (const file of files) {
+  for (const absFile of files) {
+    const relFile = path.relative(absBase, absFile);
+
     try {
-      const content = await fs.readFile(file, "utf-8");
+      const content = await fs.readFile(absFile, "utf-8");
       const lines = content.split(/\r?\n/);
 
       lines.forEach((line, lineNum) => {
@@ -46,7 +45,7 @@ export async function scanDirectory(basePath: string) {
             matches.forEach((match) => {
               totalFindings++;
               reportMatch({
-                file,
+                file: relFile,
                 line: lineNum + 1,
                 type: pattern.name,
                 value: match,
@@ -56,7 +55,7 @@ export async function scanDirectory(basePath: string) {
         }
       });
     } catch (err) {
-      console.warn(`⚠️ Failed to read: ${file}`);
+      console.warn(`⚠️ Failed to read: ${relFile}`);
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "sealight",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "CLI tool to detect hardcoded secrets and sensitive data in codebases.",
   "bin": {
     "sealight": "./dist/index.mjs"
@@ -10,14 +10,20 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cp key-patterns.json dist/",
     "scan": "node dist/index.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shreeyash836Jejurkar/sealight.git"
   },
-  "keywords": ["security", "secrets", "scanner", "cli", "devsecops"],
+  "keywords": [
+    "security",
+    "secrets",
+    "scanner",
+    "cli",
+    "devsecops"
+  ],
   "type": "module",
   "author": "Shreeyash Jejurkar",
   "license": "ISC",
